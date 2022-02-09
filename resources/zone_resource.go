@@ -4,9 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
-	"github.com/cloudflare/cloudflare-go"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 
 	// CHANGEME change this to your package name
@@ -15,7 +13,7 @@ import (
 
 func CloudflareZoneResource() *schema.Table {
 	return &schema.Table{
-		Name:     "cloudflare_zones",
+		Name:     "zones",
 		Resolver: fetchZoneResources,
 		// Those are optional
 		// DeleteFilter: nil,
@@ -25,24 +23,25 @@ func CloudflareZoneResource() *schema.Table {
 
 		Columns: []schema.Column{
 			{
-				Name:        "account_id",
+				Name:        "ID",
 				Type:        schema.TypeString,
 				Description: "Description of the column to appear in the generated documentation",
-				//Resolver: provider.ResolveAWSAccount,
+				// Resolver:    schema.PathResolver("id"),
 			},
 			{
-				Name: "region",
+				Name: "Name",
 				Type: schema.TypeString,
-				//Resolver: fetchS3BucketLocation,
+				// Resolver: schema.PathResolver("name"),
 			},
 			{
-				Name: "creation_date",
-				Type: schema.TypeTimestamp,
-			},
-			{
-				Name:     "name",
+				Name:     "Account",
 				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("other_name_in_struct"),
+				Resolver: schema.PathResolver("Account.Name"),
+			},
+			{
+				Name:     "NameServers",
+				Type:     schema.TypeStringArray,
+				Resolver: schema.PathResolver("NameServers"),
 			},
 		},
 		// A table can have relations
@@ -81,21 +80,17 @@ func fetchZoneResources(ctx context.Context, meta schema.ClientMeta, parent *sch
 	// Fetch using the third party client and put the result in res
 	// res <- c.ThirdPartyClient.getDat()
 
-	api, err := cloudflare.New(os.Getenv("CLOUDFLARE_API_KEY"), os.Getenv("CLOUDFLARE_API_EMAIL"))
-	// alternatively, you can use a scoped API token
-	// api, err := cloudflare.NewWithAPIToken(os.Getenv("CLOUDFLARE_API_TOKEN"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// Most API calls require a Context
 	// Fetch zone details on the account
-	zones, err := api.ListZones(ctx)
+	zones, err := c.ThirdPartyClient.ListZones(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 	// Print zone details
 	fmt.Println(zones)
+	// for _, v := range zones {
+	// 	// c.Logger().Debug(v.Name)
+	// }
 
 	res <- zones
 	return nil
