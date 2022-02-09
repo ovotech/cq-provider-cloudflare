@@ -2,7 +2,6 @@ package resources
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
@@ -13,7 +12,7 @@ import (
 
 func CloudflareZoneResource() *schema.Table {
 	return &schema.Table{
-		Name:     "zones",
+		Name:     "cloudflare_zones",
 		Resolver: fetchZoneResources,
 		// Those are optional
 		// DeleteFilter: nil,
@@ -42,6 +41,41 @@ func CloudflareZoneResource() *schema.Table {
 				Name:     "NameServers",
 				Type:     schema.TypeStringArray,
 				Resolver: schema.PathResolver("NameServers"),
+			},
+			{
+				Name:     "Status",
+				Type:     schema.TypeString,
+				Resolver: schema.PathResolver("Status"),
+			},
+			{
+				Name:     "CreatedOn",
+				Type:     schema.TypeTimestamp,
+				Resolver: schema.PathResolver("CreatedOn"),
+			},
+			{
+				Name:     "ModifiedOn",
+				Type:     schema.TypeTimestamp,
+				Resolver: schema.PathResolver("ModifiedOn"),
+			},
+			{
+				Name:     "ActivatedOn",
+				Type:     schema.TypeTimestamp,
+				Resolver: schema.PathResolver("ActivatedOn"),
+			},
+			{
+				Name:     "OwnerEmail",
+				Type:     schema.TypeString,
+				Resolver: schema.PathResolver("Owner.Email"),
+			},
+			{
+				Name:     "OwnerName",
+				Type:     schema.TypeString,
+				Resolver: schema.PathResolver("Owner.Name"),
+			},
+			{
+				Name:     "HostName",
+				Type:     schema.TypeString,
+				Resolver: schema.PathResolver("Host.Name"),
 			},
 		},
 		// A table can have relations
@@ -87,7 +121,6 @@ func fetchZoneResources(ctx context.Context, meta schema.ClientMeta, parent *sch
 		log.Fatal(err)
 	}
 	// Print zone details
-	fmt.Println(zones)
 	// for _, v := range zones {
 	// 	// c.Logger().Debug(v.Name)
 	// }

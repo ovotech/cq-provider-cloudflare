@@ -11,7 +11,7 @@ import (
 
 func Zones() *schema.Table {
 	return &schema.Table{
-		Name:     "zones",
+		Name:     "cloudflare_zones",
 		Resolver: nil,
 		// Those are optional
 		// DeleteFilter: nil,
