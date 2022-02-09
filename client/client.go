@@ -1,6 +1,10 @@
 package client
 
 import (
+	"log"
+	"os"
+
+	"github.com/cloudflare/cloudflare-go"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 	"github.com/hashicorp/go-hclog"
 )
@@ -11,7 +15,7 @@ type Client struct {
 	logger hclog.Logger
 
 	// CHANGEME:  Usually you store here your 3rd party clients and use them in the fetcher
-	ThirdPartyClient interface{}
+	ThirdPartyClient cloudflare.API
 }
 
 func (c *Client) Logger() hclog.Logger {
@@ -23,10 +27,19 @@ func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, erro
 	_ = providerConfig
 	// Init your client and 3rd party clients using the user's configuration
 	// passed by the SDK providerConfig
+
+	api, err := cloudflare.NewWithAPIToken(os.Getenv("CLOUDFLARE_API_TOKEN"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Most API calls require a Context
+	// Fetch zone details on the account
+
 	client := Client{
 		logger: logger,
 		// CHANGEME: pass the initialized third pard client
-		ThirdPartyClient: nil,
+		ThirdPartyClient: *api,
 	}
 
 	// Return the initialized client and it will be passed to your resources

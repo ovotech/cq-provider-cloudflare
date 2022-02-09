@@ -3,7 +3,7 @@ package provider_test
 import (
 	"testing"
 
-	"github.com/ovotech/cq-provider-cloudlfare/resources/provider"
+	"github.com/ovotech/cq-provider-cloudflare/resources/provider"
 
 	"github.com/cloudquery/cq-provider-sdk/migration"
 )
