@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/cloudflare/cloudflare-go"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
 
 	// CHANGEME change this to your package name
@@ -79,29 +80,30 @@ func CloudflareZoneResource() *schema.Table {
 			},
 		},
 		// A table can have relations
-		//Relations: []*schema.Table{
-		//	{
-		//		Name:     "provider_demo_resource_children",
-		//		Resolver: fetchDemoResourceChildren,
-		//		Columns: []schema.Column{
-		//			{
-		//				Name:     "bucket_id",
-		//				Type:     schema.TypeUUID,
-		//				Resolver: schema.ParentIdResolver,
-		//			},
-		//			{
-		//				Name:     "resource_id",
-		//				Type:     schema.TypeString,
-		//				Resolver: schema.PathResolver("Grantee.ID"),
-		//			},
-		//			{
-		//				Name:     "type",
-		//				Type:     schema.TypeString,
-		//				Resolver: schema.PathResolver("Grantee.Type"),
-		//			},
-		//		},
-		//	},
-		//},
+		Relations: []*schema.Table{
+			{
+				Name:     "cloudflare_zone_waf_packages",
+				Resolver: fetchWafChildResources,
+				Columns: []schema.Column{
+					{
+						Name: "ZoneID",
+						Type: schema.TypeUUID,
+					},
+					{
+						Name: "Name",
+						Type: schema.TypeString,
+					},
+					{
+						Name: "ID",
+						Type: schema.TypeUUID,
+					},
+					{
+						Name: "DetectionMode",
+						Type: schema.TypeString,
+					},
+				},
+			},
+		},
 	}
 }
 
@@ -126,5 +128,27 @@ func fetchZoneResources(ctx context.Context, meta schema.ClientMeta, parent *sch
 	// }
 
 	res <- zones
+	return nil
+}
+
+func fetchWafChildResources(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
+	c := meta.(*client.Client)
+	_ = c
+	// Fetch using the third party client and put the result in res
+	// res <- c.ThirdPartyClient.getDat()
+	p := parent.Item.(cloudflare.Zone)
+
+	// Most API calls require a Context
+	// Fetch zone details on the account
+	zone_waf_packages, err := c.ThirdPartyClient.ListWAFPackages(ctx, p.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Print zone details
+	// for _, v := range zones {
+	// 	// c.Logger().Debug(v.Name)
+	// }
+
+	res <- zone_waf_packages
 	return nil
 }
