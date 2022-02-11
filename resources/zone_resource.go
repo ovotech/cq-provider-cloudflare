@@ -138,8 +138,8 @@ func CloudflareZoneResource() *schema.Table {
 					},
 					{
 						Name:     "priority",
-						Type:     schema.TypeBigInt,
-						Resolver: schema.PathResolver("Priority"),
+						Type:     schema.TypeInt,
+						Resolver: schema.IntResolver("Priority"),
 					},
 					// {
 					// 	Name: "TTL",
@@ -211,8 +211,7 @@ func fetchZoneDNSResources(ctx context.Context, meta schema.ClientMeta, parent *
 	_ = c
 	p := parent.Item.(cloudflare.Zone)
 
-	// Most API calls require a Context
-	// Fetch zone details on the account
+	// Fetch dns record details on the zone
 	dns_records, err := c.ThirdPartyClient.DNSRecords(ctx, p.ID, cloudflare.DNSRecord{})
 	if err != nil {
 		log.Fatal(err)

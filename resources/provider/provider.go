@@ -23,9 +23,7 @@ func Provider() *provider.Provider {
 		Name:      "cloudflare",
 		Configure: client.Configure,
 		ResourceMap: map[string]*schema.Table{
-			// CHANGEME: place here all supported resources
 			"zone": resources.CloudflareZoneResource(),
-			"waf":  resources.CloudflareWafPackageResource(),
 		},
 		Migrations: providerMigrations,
 		Config: func() provider.Config {

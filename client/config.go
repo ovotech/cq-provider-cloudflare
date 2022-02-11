@@ -17,6 +17,7 @@ type Config struct {
 
 type Account struct {
 	Name string `hcl:"name,optional"`
+	ID   string `hcl:"ID,optional"`
 }
 
 // type Config struct {
