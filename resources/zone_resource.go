@@ -25,8 +25,8 @@ func CloudflareZoneResource() *schema.Table {
 			{
 				Name:        "ID",
 				Type:        schema.TypeString,
-				Description: "Description of the column to appear in the generated documentation",
-				// Resolver:    schema.PathResolver("id"),
+				Description: "ZoneID",
+				Resolver:    schema.PathResolver("ID"),
 			},
 			{
 				Name: "Name",
@@ -87,15 +87,64 @@ func CloudflareZoneResource() *schema.Table {
 				Columns: []schema.Column{
 					{
 						Name: "ZoneID",
-						Type: schema.TypeUUID,
+						Type: schema.TypeString,
 					},
 					{
 						Name: "Name",
 						Type: schema.TypeString,
 					},
 					{
-						Name: "ID",
-						Type: schema.TypeUUID,
+						Name:     "ID",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("ID"),
+					},
+					{
+						Name: "DetectionMode",
+						Type: schema.TypeString,
+					},
+				},
+			},
+			{
+				Name:     "cloudflare_zone_dns_records",
+				Resolver: fetchZoneDNSResources,
+				Columns: []schema.Column{
+					{
+						Name: "ZoneID",
+						Type: schema.TypeString,
+					},
+					{
+						Name: "Name",
+						Type: schema.TypeString,
+					},
+					{
+						Name: "Content",
+						Type: schema.TypeString,
+					},
+					{
+						Name: "ZoneName",
+						Type: schema.TypeString,
+					},
+					{
+						Name: "Priority",
+						Type: schema.TypeBigInt,
+					},
+					{
+						Name:     "TTL",
+						Type:     schema.TypeSmallInt,
+						Resolver: schema.IntResolver("TTL"),
+					},
+					{
+						Name: "Proxied",
+						Type: schema.TypeBool,
+					},
+					{
+						Name: "Locked",
+						Type: schema.TypeBool,
+					},
+					{
+						Name:     "ID",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("ID"),
 					},
 					{
 						Name: "DetectionMode",
@@ -134,8 +183,6 @@ func fetchZoneResources(ctx context.Context, meta schema.ClientMeta, parent *sch
 func fetchWafChildResources(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
 	c := meta.(*client.Client)
 	_ = c
-	// Fetch using the third party client and put the result in res
-	// res <- c.ThirdPartyClient.getDat()
 	p := parent.Item.(cloudflare.Zone)
 
 	// Most API calls require a Context
@@ -144,11 +191,23 @@ func fetchWafChildResources(ctx context.Context, meta schema.ClientMeta, parent 
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Print zone details
-	// for _, v := range zones {
-	// 	// c.Logger().Debug(v.Name)
-	// }
 
 	res <- zone_waf_packages
+	return nil
+}
+
+func fetchZoneDNSResources(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
+	c := meta.(*client.Client)
+	_ = c
+	p := parent.Item.(cloudflare.Zone)
+
+	// Most API calls require a Context
+	// Fetch zone details on the account
+	dns_records, err := c.ThirdPartyClient.DNSRecords(ctx, p.ID, cloudflare.DNSRecord{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	res <- dns_records
 	return nil
 }
