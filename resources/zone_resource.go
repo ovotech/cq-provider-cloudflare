@@ -23,58 +23,58 @@ func CloudflareZoneResource() *schema.Table {
 
 		Columns: []schema.Column{
 			{
-				Name:        "ID",
+				Name:        "id",
 				Type:        schema.TypeString,
-				Description: "ZoneID",
+				Description: "Cloudflare ZoneID",
 				Resolver:    schema.PathResolver("ID"),
 			},
 			{
-				Name: "Name",
-				Type: schema.TypeString,
-				// Resolver: schema.PathResolver("name"),
+				Name:     "name",
+				Type:     schema.TypeString,
+				Resolver: schema.PathResolver("Name"),
 			},
 			{
-				Name:     "Account",
+				Name:     "account",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("Account.Name"),
 			},
 			{
-				Name:     "NameServers",
+				Name:     "name_servers",
 				Type:     schema.TypeStringArray,
 				Resolver: schema.PathResolver("NameServers"),
 			},
 			{
-				Name:     "Status",
+				Name:     "status",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("Status"),
 			},
 			{
-				Name:     "CreatedOn",
+				Name:     "created_on",
 				Type:     schema.TypeTimestamp,
 				Resolver: schema.PathResolver("CreatedOn"),
 			},
 			{
-				Name:     "ModifiedOn",
+				Name:     "modified_on",
 				Type:     schema.TypeTimestamp,
 				Resolver: schema.PathResolver("ModifiedOn"),
 			},
 			{
-				Name:     "ActivatedOn",
+				Name:     "activated_on",
 				Type:     schema.TypeTimestamp,
 				Resolver: schema.PathResolver("ActivatedOn"),
 			},
 			{
-				Name:     "OwnerEmail",
+				Name:     "owner_email",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("Owner.Email"),
 			},
 			{
-				Name:     "OwnerName",
+				Name:     "owner_name",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("Owner.Name"),
 			},
 			{
-				Name:     "HostName",
+				Name:     "host_name",
 				Type:     schema.TypeString,
 				Resolver: schema.PathResolver("Host.Name"),
 			},
@@ -86,21 +86,24 @@ func CloudflareZoneResource() *schema.Table {
 				Resolver: fetchWafChildResources,
 				Columns: []schema.Column{
 					{
-						Name: "ZoneID",
-						Type: schema.TypeString,
+						Name:     "zone_id",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("ZoneID"),
 					},
 					{
-						Name: "Name",
-						Type: schema.TypeString,
+						Name:     "name",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("Name"),
 					},
 					{
-						Name:     "ID",
+						Name:     "id",
 						Type:     schema.TypeString,
 						Resolver: schema.PathResolver("ID"),
 					},
 					{
-						Name: "DetectionMode",
-						Type: schema.TypeString,
+						Name:     "detection_mode",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("DetectionMode"),
 					},
 				},
 			},
@@ -109,46 +112,53 @@ func CloudflareZoneResource() *schema.Table {
 				Resolver: fetchZoneDNSResources,
 				Columns: []schema.Column{
 					{
-						Name: "ZoneID",
-						Type: schema.TypeString,
+						Name:     "zone_id",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("ZoneID"),
 					},
 					{
-						Name: "Name",
-						Type: schema.TypeString,
+						Name:     "name",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("Name"),
 					},
 					{
-						Name: "Content",
-						Type: schema.TypeString,
-					},
-					{
-						Name: "ZoneName",
-						Type: schema.TypeString,
-					},
-					{
-						Name: "Priority",
-						Type: schema.TypeBigInt,
-					},
-					{
-						Name:     "TTL",
-						Type:     schema.TypeSmallInt,
-						Resolver: schema.IntResolver("TTL"),
-					},
-					{
-						Name: "Proxied",
-						Type: schema.TypeBool,
-					},
-					{
-						Name: "Locked",
-						Type: schema.TypeBool,
-					},
-					{
-						Name:     "ID",
+						Name:     "id",
 						Type:     schema.TypeString,
 						Resolver: schema.PathResolver("ID"),
 					},
 					{
-						Name: "DetectionMode",
-						Type: schema.TypeString,
+						Name:     "content",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("Content"),
+					},
+					{
+						Name:     "zone_name",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("ZoneName"),
+					},
+					{
+						Name:     "priority",
+						Type:     schema.TypeBigInt,
+						Resolver: schema.PathResolver("Priority"),
+					},
+					// {
+					// 	Name: "TTL",
+					// 	Type: schema.TypeString,
+					// },
+					{
+						Name:     "proxied",
+						Type:     schema.TypeBool,
+						Resolver: schema.PathResolver("Proxied"),
+					},
+					{
+						Name:     "locked",
+						Type:     schema.TypeBool,
+						Resolver: schema.PathResolver("Locked"),
+					},
+					{
+						Name:     "detection_mode",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("DetectionMode"),
 					},
 				},
 			},
