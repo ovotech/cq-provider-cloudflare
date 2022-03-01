@@ -164,7 +164,7 @@ func CloudflareZoneResource() *schema.Table {
 					},
 					{
 						Name:     "priority",
-						Type:     schema.TypeInt,
+						Type:     schema.TypeBigInt,
 						Resolver: schema.IntResolver("Priority"),
 					},
 					// {
