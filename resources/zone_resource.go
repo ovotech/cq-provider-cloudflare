@@ -2,7 +2,6 @@ package resources
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/cloudflare/cloudflare-go"
@@ -115,7 +114,7 @@ func CloudflareZoneResource() *schema.Table {
 					{
 						Name:     "zone_id",
 						Type:     schema.TypeString,
-						Resolver: schema.ParentPathResolver("ZoneID"),
+						Resolver: schema.ParentPathResolver("ID"),
 					},
 					{
 						Name:     "value",
@@ -130,7 +129,7 @@ func CloudflareZoneResource() *schema.Table {
 					{
 						Name:     "modified_on",
 						Type:     schema.TypeTimestamp,
-						Resolver: schema.PathResolver("ModifiedOn"),
+						Resolver: schema.DateResolver("ModifiedOn"),
 					},
 				},
 			},
@@ -208,11 +207,6 @@ func fetchZoneResources(ctx context.Context, meta schema.ClientMeta, parent *sch
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Print zone details
-	// for _, v := range zones {
-	// 	// c.Logger().Debug(v.Name)
-	// }
-
 	res <- zones
 	return nil
 }
@@ -244,9 +238,9 @@ func fetchZoneSettings(ctx context.Context, meta schema.ClientMeta, parent *sche
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(zone_settings)
 
-	res <- zone_settings
+	res <- zone_settings.Result
+
 	return nil
 }
 
