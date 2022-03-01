@@ -18,8 +18,7 @@ var (
 
 func Provider() *provider.Provider {
 	return &provider.Provider{
-		Version: Version,
-		// CHANGEME: Change to your provider name
+		Version:   Version,
 		Name:      "cloudflare",
 		Configure: client.Configure,
 		ResourceMap: map[string]*schema.Table{

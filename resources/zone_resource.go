@@ -2,6 +2,7 @@ package resources
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/cloudflare/cloudflare-go"
@@ -108,6 +109,32 @@ func CloudflareZoneResource() *schema.Table {
 				},
 			},
 			{
+				Name:     "cloudflare_zone_settings",
+				Resolver: fetchZoneSettings,
+				Columns: []schema.Column{
+					{
+						Name:     "zone_id",
+						Type:     schema.TypeString,
+						Resolver: schema.ParentPathResolver("ZoneID"),
+					},
+					{
+						Name:     "value",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("Value"),
+					},
+					{
+						Name:     "id",
+						Type:     schema.TypeString,
+						Resolver: schema.PathResolver("ID"),
+					},
+					{
+						Name:     "modified_on",
+						Type:     schema.TypeTimestamp,
+						Resolver: schema.PathResolver("ModifiedOn"),
+					},
+				},
+			},
+			{
 				Name:     "cloudflare_zone_dns_records",
 				Resolver: fetchZoneDNSResources,
 				Columns: []schema.Column{
@@ -203,6 +230,23 @@ func fetchWafChildResources(ctx context.Context, meta schema.ClientMeta, parent 
 	}
 
 	res <- zone_waf_packages
+	return nil
+}
+
+func fetchZoneSettings(ctx context.Context, meta schema.ClientMeta, parent *schema.Resource, res chan<- interface{}) error {
+	c := meta.(*client.Client)
+	_ = c
+	p := parent.Item.(cloudflare.Zone)
+
+	// Most API calls require a Context
+	// Fetch zone details on the account
+	zone_settings, err := c.ThirdPartyClient.ZoneSettings(ctx, p.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(zone_settings)
+
+	res <- zone_settings
 	return nil
 }
 

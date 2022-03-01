@@ -3,7 +3,6 @@ package client
 // Provider Configuration
 
 type Config struct {
-	// ADD THIS LINE:
 	CloudflareToken string    `hcl:"cloudflare_token,optional"`
 	Account         []Account `hcl:"account,block"`
 
