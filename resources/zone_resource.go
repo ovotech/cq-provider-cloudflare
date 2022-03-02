@@ -17,7 +17,7 @@ func CloudflareZoneResource() *schema.Table {
 		Resolver: fetchZoneResources,
 		// Those are optional
 		// DeleteFilter: nil,
-		// Multiplex:    nil,
+		// Multiplex: true,
 		// IgnoreError:  nil,
 		//PostResourceResolver: nil,
 
@@ -167,10 +167,11 @@ func CloudflareZoneResource() *schema.Table {
 						Type:     schema.TypeBigInt,
 						Resolver: schema.IntResolver("Priority"),
 					},
-					// {
-					// 	Name: "TTL",
-					// 	Type: schema.TypeString,
-					// },
+					{
+						Name:     "ttl",
+						Type:     schema.TypeBigInt,
+						Resolver: schema.IntResolver("TTL"),
+					},
 					{
 						Name:     "proxied",
 						Type:     schema.TypeBool,
@@ -216,8 +217,7 @@ func fetchWafChildResources(ctx context.Context, meta schema.ClientMeta, parent 
 	_ = c
 	p := parent.Item.(cloudflare.Zone)
 
-	// Most API calls require a Context
-	// Fetch zone details on the account
+	// Fetch zone waf package details
 	zone_waf_packages, err := c.ThirdPartyClient.ListWAFPackages(ctx, p.ID)
 	if err != nil {
 		log.Fatal(err)
@@ -232,14 +232,24 @@ func fetchZoneSettings(ctx context.Context, meta schema.ClientMeta, parent *sche
 	_ = c
 	p := parent.Item.(cloudflare.Zone)
 
-	// Most API calls require a Context
-	// Fetch zone details on the account
+	// Fetch zone settings
 	zone_settings, err := c.ThirdPartyClient.ZoneSettings(ctx, p.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	res <- zone_settings.Result
+	// TODO: Update this to support non string types
+
+	for _, setting := range zone_settings.Result {
+
+		switch setting.Value.(type) {
+		case string:
+			res <- setting
+
+		default:
+			// fmt.Printf("%s has unsupported type", setting.ID)
+		}
+	}
 
 	return nil
 }
