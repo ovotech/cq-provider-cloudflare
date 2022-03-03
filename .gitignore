@@ -1,0 +1,38 @@
+.DS_store
+crash.log
+.idea
+.vscode
+cloudquery
+cloudquery.db
+cloudquery.zip
+/config.yml
+dist/
+vendor/
+bin/
+.release-env
+cq-provider-cloudflare
+*.exe
+*.log
+.cq_reattach
+.cq/*
+# Local .terraform directories
+**/.terraform/*
+node_modules/
+# .tfstate files
+*.tfstate
+*.tfstate.*
+.swp
+tflog
+
+__debug_bin
+#test directories
+**/.test/*
+**/snapshots/*
+./terraform/tmp
+./terraform/builds
+./terraform/.terraform
+./terraform/.terraform.loch.hcl
+./terraform/terraform-override.tf
+.env
+terraform/downloaded*
+config.hcl
