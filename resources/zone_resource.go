@@ -27,18 +27,23 @@ func CloudflareZoneResource() *schema.Table {
 				Resolver:    schema.PathResolver("ID"),
 			},
 			{
-				Name:     "name",
-				Type:     schema.TypeString,
-				Resolver: schema.PathResolver("Name"),
+				Name:        "name",
+				Type:        schema.TypeString,
+				Description: "Zone Name",
+				Resolver:    schema.PathResolver("Name"),
 			},
 			{
-				Name:     "account",
-				Type:     schema.TypeString,
+				Name:        "account",
+				Type:        schema.TypeString,
+				Description: "Account Name",
+
 				Resolver: schema.PathResolver("Account.Name"),
 			},
 			{
-				Name:     "name_servers",
-				Type:     schema.TypeStringArray,
+				Name:        "name_servers",
+				Type:        schema.TypeStringArray,
+				Description: "List of Name Servers ",
+
 				Resolver: schema.PathResolver("NameServers"),
 			},
 			{
