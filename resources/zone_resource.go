@@ -6,8 +6,6 @@ import (
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/cloudquery/cq-provider-sdk/provider/schema"
-
-	// CHANGEME change this to your package name
 	"github.com/ovotech/cq-provider-cloudflare/client"
 )
 
@@ -79,7 +77,7 @@ func CloudflareZoneResource() *schema.Table {
 				Resolver: schema.PathResolver("Host.Name"),
 			},
 		},
-		// A table can have relations
+		// Table relations
 		Relations: []*schema.Table{
 			{
 				Name:     "cloudflare_zone_waf_packages",
@@ -200,7 +198,6 @@ func fetchZoneResources(ctx context.Context, meta schema.ClientMeta, parent *sch
 	c := meta.(*client.Client)
 	_ = c
 	// Fetch using the third party client and put the result in res
-	// res <- c.ThirdPartyClient.getDat()
 
 	// Most API calls require a Context
 	// Fetch zone details on the account
