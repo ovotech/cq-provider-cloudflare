@@ -21,11 +21,13 @@ jobs:
         with:
           version: latest
           args: release --rm-dist --skip-validate --skip-publish --skip-sign
-      - name: Import GPG key
+      -
+        name: Import GPG key
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v3
-        with:
-          gpg-private-key: ${{ secrets.PRIVATE_KEY }}
+        uses: hashicorp/ghaction-import-gpg@v2.1.0
+        env:
+          # These secrets will need to be configured for the repository:
+          GPG_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
@@ -34,3 +36,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          GPG_TTY: $(tty)
