@@ -1,6 +1,7 @@
 package client
 
 import (
+	"errors"
 	"log"
 	"os"
 
@@ -25,20 +26,29 @@ func (c *Client) Logger() hclog.Logger {
 func Configure(logger hclog.Logger, config interface{}) (schema.ClientMeta, error) {
 	providerConfig := config.(*Config)
 	_ = providerConfig
-	// Init your client and 3rd party clients using the user's configuration
+	// Init client and 3rd party clients using the user's configuration
 	// passed by the SDK providerConfig
+	apiToken := os.Getenv("CLOUDFLARE_API_TOKEN")
 
-	api, err := cloudflare.NewWithAPIToken(os.Getenv("CLOUDFLARE_API_TOKEN"))
+	if apiToken == "" {
+		apiToken = providerConfig.CloudflareToken
+		if apiToken == "" {
+			log.Fatal("Missing Cloudflare API Token")
+			return nil, errors.New("Missing Cloudflare API Token")
+		}
+	}
+
+	api, err := cloudflare.NewWithAPIToken(apiToken)
 	if err != nil {
 		log.Fatal(err)
+		return nil, err
 	}
 
 	// Most API calls require a Context
 	// Fetch zone details on the account
 
 	client := Client{
-		logger: logger,
-		// CHANGEME: pass the initialized third pard client
+		logger:           logger,
 		ThirdPartyClient: *api,
 	}
 

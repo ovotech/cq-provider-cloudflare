@@ -21,3 +21,5 @@ Add the following to your `config.hcl` file
   // enables partial fetching, allowing for any failures to not stop full resource pull
   enable_partial_fetch = true
 }
+
+Alternatively, if you dont want to include your cloudflare_token in the config, you can set the `CLOUDFLARE_API_TOKEN` environment variable instead.

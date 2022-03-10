@@ -11,6 +11,8 @@ vendor/
 bin/
 .release-env
 cq-provider-cloudflare
+cq-provider-cf
+
 *.exe
 *.log
 .cq_reattach
