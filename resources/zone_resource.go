@@ -173,7 +173,7 @@ func CloudflareZoneResource() *schema.Table {
 					{
 						Name:     "ttl",
 						Type:     schema.TypeBigInt,
-						Resolver: schema.IntResolver("TTL"),
+						Resolver: schema.PathResolver("TTL"),
 					},
 					{
 						Name:     "proxied",
