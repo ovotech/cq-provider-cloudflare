@@ -1,3 +1,6 @@
+# CloudFlare Provider
+
+This CloudQuery CloudFlare provider extracts and transforms your CloudFlare resources into PostgreSQL.
 # Configuration
 
 
@@ -6,7 +9,7 @@ Add the following to your `config.hcl` file
 ```provider "cloudflare" {
   configuration {
     // Add this line    
-    cloudflare_token = "your_cloudflare_api_token"
+    cloudflare_token = "your_cloudflare_api_token" // Or see comment below to use env var
   }
    
   accounts {
