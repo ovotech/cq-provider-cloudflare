@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/cloudflare/cloudflare-go v0.31.0
-	github.com/cloudquery/cq-provider-sdk v0.8.5
+	github.com/cloudquery/cq-provider-sdk v0.8.15
 	github.com/hashicorp/go-hclog v1.0.0
 )
 
